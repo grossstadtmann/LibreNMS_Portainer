@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-ARG LIBRENMS_VERSION="23.4.1"
+ARG LIBRENMS_VERSION="23.8.1"
 ARG WEATHERMAP_PLUGIN_COMMIT="0b2ff643b65ee4948e4f74bb5cad5babdaddef27"
 ARG ALPINE_VERSION="3.17"
 
@@ -66,6 +66,7 @@ RUN apk --update --no-cache add \
     py3-pip \
     rrdtool \
     runit \
+    sed \
     shadow \
     syslog-ng=3.38.1-r0 \
     ttf-dejavu \
@@ -115,6 +116,7 @@ RUN apk --update --no-cache add -t build-dependencies \
     linux-headers \
     musl-dev \
     python3-dev \
+  && echo "Installing LibreNMS https://github.com/librenms/librenms.git#${LIBRENMS_VERSION}..." \
   && git clone --depth=1 --branch ${LIBRENMS_VERSION} https://github.com/librenms/librenms.git . \
   && pip3 install --ignore-installed -r requirements.txt --upgrade \
   && COMPOSER_CACHE_DIR="/tmp" composer install --no-dev --no-interaction --no-ansi \

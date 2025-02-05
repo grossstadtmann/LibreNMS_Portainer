@@ -55,7 +55,7 @@ if [ -z "$DB_PASSWORD" ]; then
   exit 1
 fi
 
-dbcmd="mysql -h ${DB_HOST} -P ${DB_PORT} -u "${DB_USER}" "-p${DB_PASSWORD}""
+dbcmd="mariadb -h ${DB_HOST} -P ${DB_PORT} -u "${DB_USER}" "-p${DB_PASSWORD}""
 unset DB_PASSWORD
 
 echo "Waiting ${DB_TIMEOUT}s for database to be ready..."
@@ -74,7 +74,7 @@ echo "Database ready!"
 counttables=$(echo 'SHOW TABLES' | ${dbcmd} "$DB_NAME" | wc -l)
 if [ "${counttables}" -eq "0" ]; then
   echo "Enabling First Run Wizard..."
-  echo "INSTALL=user,finish">> ${LIBRENMS_PATH}/.env
+  echo "INSTALL=user,finish" >>${LIBRENMS_PATH}/.env
 fi
 
 echo "Updating database schema..."
@@ -99,7 +99,7 @@ cat >/etc/services.d/php-fpm/run <<EOL
 #!/usr/bin/execlineb -P
 with-contenv
 s6-setuidgid ${PUID}:${PGID}
-php-fpm81 -F
+php-fpm83 -F
 EOL
 chmod +x /etc/services.d/php-fpm/run
 
